@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="de.kontoklar.app.test">
+  <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="35" />
+  <application android:label="KontoKlar Tests">
+    <provider android:name="de.kontoklar.app.ExportTestProvider" android:authorities="de.kontoklar.app.test.exports" android:exported="true" />
+  </application>
+  <instrumentation android:name="de.kontoklar.app.SmokeTest" android:targetPackage="de.kontoklar.app" android:label="Offline smoke test" />
+</manifest>

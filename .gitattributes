@@ -1,0 +1,3 @@
+windows/src/vendor/** linguist-vendored
+android/app/src/main/assets/web/vendor/** linguist-vendored
+android/app/src/main/assets/web/** linguist-generated

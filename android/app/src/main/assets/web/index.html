@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KontoKlar · Nachweise vorbereiten</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%232056db'/%3E%3Ctext x='8' y='29' font-size='27' fill='white'%3E▦%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="android.css">
+  <script src="vendor/tesseract.min.js" defer></script>
+  <script src="vendor/pdf-lib.min.js" defer></script>
+  <script src="android.js" defer></script><script type="module" src="app.mjs"></script>
+</head>
+<body>
+<header><div class="brand"><span class="logo">▦</span><div>KontoKlar<small>Deine Nachweise. Deine Privatsphäre.</small></div></div><span class="local"><i></i> Offline <span>auf diesem Gerät</span></span></header>
+<main>
+<aside class="sidebar">
+  <div class="section-title">01 &nbsp; DOKUMENTE</div>
+  <button id="add" class="primary wide">＋ Bilder oder PDFs öffnen</button>
+  <input id="files" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,application/pdf,.pdf" multiple hidden>
+  <p class="hint">PNG, JPG, WebP, BMP und PDF.<br>Auch mehrseitige Scans.</p>
+  <div id="pages" class="page-list"></div>
+  <div class="sidebar-bottom"><button id="demo" class="secondary wide">Beispiel ausprobieren</button><button id="clear" class="text-button wide">Alle Dokumente entfernen</button></div>
+</aside>
+<section class="work">
+  <div class="work-heading"><div><div class="eyebrow">NACHWEISE VORBEREITEN</div><h1>Nur das Relevante bleibt sichtbar.</h1></div><button id="help" class="secondary">So geht’s</button></div>
+  <div class="search-card"><label for="query">Welche Buchungen möchtest du behalten?</label><div class="search-row"><input id="query" placeholder="z. B. Name deiner Freundin oder Verwendungszweck"><button id="find" class="primary">Buchungen finden</button></div><p class="hint">Mehrere Suchbegriffe mit Semikolon trennen. Ein passender Begriff genügt. Die Suche schlägt Bereiche vor; du prüfst sie vor dem Export.</p><label class="search-scope"><input id="search-all" type="checkbox" checked> Alle geöffneten Seiten durchsuchen</label></div>
+  <div id="status" class="status" role="status" aria-live="polite">Öffne ein Dokument oder probiere das Beispiel aus.</div>
+  <div id="tool-help" class="tool-help" hidden role="note"><strong>Buchungsbereich: Wo soll die App suchen?</strong><p>Ziehe ein Rechteck um die gesamte Buchungstabelle dieser Seite. <b>Datum, Buchungstext und Betrag</b> gehören hinein. Starte danach <b>„Buchungen finden“</b> erneut.</p><p>Das hilft, wenn Kontokopf oder Fußzeilen die Erkennung stören. Die Begrenzung gilt nur für diese Seite. Welche Angaben sichtbar bleiben, legst du anschließend mit „Sichtbar lassen“ oder „Sichtbar markieren“ fest.</p><p>Zurücksetzen kannst du die Begrenzung unter „Sichtbare Buchungen“ mit „Buchungsbereich zurücksetzen“.</p></div>
+  <div class="toolbar"><div class="tools"><button data-mode="move">☝ Bewegen</button><button data-mode="keep" class="active" title="Ein Rechteck aufziehen, das sichtbar bleiben soll">＋ Sichtbar markieren</button><button data-mode="hide" title="Ein Rechteck zum Schwärzen aufziehen">▰ Schwärzen</button><button data-mode="area" aria-describedby="tool-help" title="Buchungstabelle dieser Seite eingrenzen; danach erneut suchen">Buchungsbereich ⓘ</button><button id="undo">↶ Rückgängig</button></div><label class="toggle"><input type="checkbox" id="preview"> Exportvorschau</label><label class="mobile-zoom-label">Ansicht <select id="mobile-zoom"><option value="1">Passend</option><option value="1.5">150 %</option><option value="2">200 %</option><option value="3">300 %</option></select></label></div><p class="mobile-tip">Mit „Bewegen“ scrollen. Zum Freigeben oder Schwärzen das Werkzeug wählen und ein Rechteck mit dem Finger aufziehen.</p>
+  <div id="stage" class="stage"><div id="empty"><div class="empty-icon">▤</div><h2>Ein guter Nachweis zeigt nur, was zählt.</h2><p>Ziehe Bilder oder PDF-Dateien hierher.<br>Deine Originaldateien bleiben unverändert.</p><button id="empty-add" class="primary">Dokumente auswählen</button><p class="hint">Keine Anmeldung. Kein Upload. Keine Cloud.</p></div><div id="paper" class="paper" hidden><canvas id="view" aria-label="Dokument; sichtbare Bereiche können mit der Maus markiert werden"></canvas><div id="rectangles"></div><div id="drawing"></div></div></div>
+  <div class="page-footer"><span id="page-info">Noch keine Seite geladen</span><span>Grün = bleibt sichtbar · Rot = wird geschwärzt</span></div>
+</section>
+<aside class="review">
+  <div class="section-title">02 &nbsp; PRÜFEN</div><h2>Sichtbare Buchungen</h2><p class="hint">Übernimm nur passende Vorschläge. Prüfe besonders die Grenzen mehrzeiliger Buchungen.</p>
+  <div id="suggestions"><div class="muted-box">Nach der Suche erscheinen hier die Treffer der aktuellen Seite.</div></div>
+  <div id="selection-list"></div><button id="mobile-preview" class="secondary wide">Exportvorschau öffnen</button><p class="hint">Vorschau ansehen, danach hier die Prüfung bestätigen.</p>
+  <div id="mobile-save-result" role="status"></div><div class="export-box"><div class="section-title">03 &nbsp; EXPORTIEREN</div><label for="export-scope" class="scope-label">Seiten im PDF</label><select id="export-scope" class="wide"><option value="hits">Nur Seiten mit Treffern</option><option value="all">Alle Seiten beibehalten</option></select><p id="export-hint" class="hint"></p><label class="review-check"><input type="checkbox" id="reviewed" disabled><span>Ich habe die Exportvorschau dieser Seite geprüft.</span></label><p id="review-count" class="hint">0 Seiten geprüft</p><button id="export-pdf" class="primary wide" disabled>Geschwärzte PDF speichern</button><button id="export-png" class="secondary wide" disabled>Aktuelle Seite als PNG</button><p class="hint">Exportierte Dateien enthalten fest geschwärzte Bildpixel.</p></div>
+</aside>
+</main><nav class="mobile-nav" aria-label="Arbeitsschritte"><button data-tab-target="documents">▤ Dokumente</button><button data-tab-target="edit">✎ Bearbeiten</button><button data-tab-target="review">✓ Prüfen &amp; Speichern</button></nav>
+<dialog id="help-dialog"><button id="close-help" class="dialog-close" aria-label="Schließen">×</button><h2>In vier Schritten zum Nachweis</h2><ol><li><b>Dokumente öffnen.</b> Bilder und mehrseitige PDFs werden seitenweise geladen.</li><li><b>Buchungen finden.</b> Gib einen Namen oder einen Teil des Verwendungszwecks ein. Bei Scans liest die lokale Texterkennung die Seite.</li><li><b>Sichtbare Bereiche prüfen.</b> Übernimm Vorschläge oder ziehe mit „Sichtbar markieren“ eigene Rechtecke auf. Du kannst z. B. Kontoinhaber und Auszugsdatum zusätzlich freigeben. „Schwärzen“ hat immer Vorrang.</li><li><b>Vorschau bestätigen und exportieren.</b> Unter „Seiten im PDF“ wählst du „Nur Seiten mit Treffern“ oder „Alle Seiten beibehalten“. Bei allen Seiten werden Seiten ohne Freigaben vollständig geschwärzt mit ausgegeben. Alle Seiten mit Freigaben müssen für diesen Modus geprüft sein. Die Auswahl gilt für alle geöffneten Dokumente.</li></ol><p>Die Erkennung kann Fehler machen. Bei ungewöhnlichen Layouts oder schrägen Fotos nutze die manuelle Markierung. Die neue PDF enthält ausschließlich die bearbeiteten Seitenbilder.</p><p>Schwärzungen sind im Export sichtbar. Ob das Finanzamt den Nachweis in dieser Form akzeptiert, hängt vom Einzelfall ab. Bewahre die Originale auf.</p><p class="hint">Alles wird lokal verarbeitet. Dokumente werden nur während dieser Sitzung gehalten und nicht automatisch gespeichert.</p></dialog>
+</body></html>

@@ -1,0 +1,28 @@
+{
+  "name": "kontoklar",
+  "version": "1.1.1",
+  "description": "Lokale Windows-App zum Schw\u00e4rzen von Kontoausz\u00fcgen in Bildern und PDFs",
+  "main": "main.cjs",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "node scripts/serve.cjs",
+    "test": "node --test tests/core.test.mjs",
+    "test:e2e": "node tests/e2e.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.4.299",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1",
+    "electron": "44.9.2"
+  }
+}

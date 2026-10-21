@@ -1,0 +1,31 @@
+# Dependencies and generated files
+**/node_modules/
+**/build/
+**/dist/
+**/tests/output/
+**/__pycache__/
+*.pyc
+*.log
+.android-tools/
+.gradle/
+**/.gradle/
+local.properties
+**/local.properties
+.DS_Store
+
+# Signing material and local credentials
+**/signing/
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+.env
+.env.*
+
+# Applications and archives are distributed through GitHub Releases
+*.apk
+*.idsig
+*.aab
+*.exe
+*.zip
