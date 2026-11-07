@@ -60,6 +60,7 @@ try{
     await page.screenshot({path:'tests/output/seitenliste-'+viewport.width+'.png'});
     await page.locator('.page-item').first().click();
     assert.match(await page.locator('#page-info').textContent(),/^Seite 1 von 40/);
+    page.once('dialog',dialog=>dialog.accept());
     await page.locator('#clear').click();
     assert.equal(await page.locator('.page-item').count(),0);
     await page.locator('#demo').click();
