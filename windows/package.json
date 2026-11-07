@@ -1,7 +1,7 @@
 {
   "name": "kontoklar",
-  "version": "1.1.1",
-  "description": "Lokale Windows-App zum Schw\u00e4rzen von Kontoausz\u00fcgen in Bildern und PDFs",
+  "version": "1.1.2",
+  "description": "Lokale Windows-App zum Schwärzen von Kontoauszügen in Bildern und PDFs",
   "main": "main.cjs",
   "directories": {
     "test": "tests"
@@ -10,7 +10,8 @@
     "start": "electron .",
     "dev": "node scripts/serve.cjs",
     "test": "node --test tests/core.test.mjs",
-    "test:e2e": "node tests/e2e.mjs"
+    "test:e2e": "node tests/e2e.mjs",
+    "test:layout": "node tests/sidebar.e2e.mjs"
   },
   "keywords": [],
   "author": "",

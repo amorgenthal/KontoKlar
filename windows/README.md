@@ -1,6 +1,8 @@
-# KontoKlar · Version 1.1.1
+# KontoKlar · Version 1.1.2
 
 Eine lokale Windows-Anwendung, um relevante Überweisungen aus Bildern und PDFs als geschwärzte Nachweise vorzubereiten.
+
+Version 1.1.2 behebt überlagerte Seiten und Schaltflächen bei langen PDFs: Die linke Seitenliste scrollt unabhängig; Öffnen, Beispiel und Entfernen bleiben erreichbar.
 
 Version 1.1.1 behebt die Meldung `pdf.destroy is not a function` beim PDF-Import und gibt die zugehörigen PDF-Worker auch nach fehlgeschlagenen Ladevorgängen frei.
 
@@ -50,9 +52,10 @@ npm test
 # Entwicklungsserver in einem zweiten Terminal starten:
 npm run dev
 npm run test:e2e
+npm run test:layout
 ```
 
-Die Oberflächentests nutzen auf dieser Linux-Testumgebung `/usr/bin/chromium`; für andere Systeme den Pfad in `tests/e2e.mjs` anpassen. Die Tests prüfen unter anderem mehrzeilige Treffer, manuelle Freigaben/Schwärzungen, den Vorrang von Schwärzungen, die Exportfreigabe, PDF- und Bildimport, lokale OCR, PNG-/PDF-Export sowie das Fehlen einer exportierten Textebene und ausgehender Netzwerkaufrufe.
+Für die Oberflächentests zuerst `npx playwright install chromium` ausführen. Der allgemeine Test nutzt standardmäßig `/usr/bin/chromium`; mit `KONTOKLAR_CHROMIUM` lässt sich der Browserpfad setzen. Der Layouttest verwendet den von Playwright installierten Browser und prüft eine 40-seitige PDF bei drei Fenstergrößen, einschließlich Seitenwahl und erreichbarer Schaltflächen. Die Tests prüfen unter anderem mehrzeilige Treffer, manuelle Freigaben/Schwärzungen, den Vorrang von Schwärzungen, die Exportfreigabe, PDF- und Bildimport, lokale OCR, PNG-/PDF-Export sowie das Fehlen einer exportierten Textebene und ausgehender Netzwerkaufrufe.
 
 Die App wurde in Chromium unter Linux funktional geprüft. Das Windows-Paket enthält die offizielle Electron-Laufzeit, deren SHA-256 gegen die veröffentlichten Prüfsummen verifiziert wurde. Ein Start auf einem echten Windows-Rechner wurde hier nicht getestet.
 

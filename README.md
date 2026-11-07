@@ -9,7 +9,7 @@ Die fertigen Anwendungen stehen unter **[Releases](https://github.com/amorgentha
 | Plattform | Aktuelle Version | Download | Voraussetzung |
 | --- | --- | --- | --- |
 | Android | 1.2.3 | [APK herunterladen](https://github.com/amorgenthal/KontoKlar/releases/download/v1.2.3/KontoKlar-Android-v1.2.3.apk) | Android 10 oder neuer, aktuelles Android System WebView |
-| Windows | 1.1.1 | [Windows-ZIP herunterladen](https://github.com/amorgenthal/KontoKlar/releases/download/v1.2.3/KontoKlar-Windows-x64-v1.1.1.zip) | Windows 10/11, Intel/AMD mit 64 Bit |
+| Windows | 1.1.2 | [Windows-ZIP herunterladen](https://github.com/amorgenthal/KontoKlar/releases/download/windows-v1.1.2/KontoKlar-Windows-x64-v1.1.2.zip) | Windows 10/11, Intel/AMD mit 64 Bit |
 
 **Android:** APK auf dem Gerät öffnen und installieren. Falls erforderlich, die Installation aus der verwendeten Quelle erlauben. Updates können über die bisherige Installation installiert werden.
 

@@ -1,12 +1,15 @@
-name: Windows layout regression
+name: Windows layout regression and build
 on:
   push:
     branches: ['fix/windows-page-list-overlap']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  test:
+  test-and-build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: windows
@@ -22,9 +25,50 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm test
-      - name: Check long PDF sidebar layout
+      - name: Check PDF sidebar and existing application flows
         run: |
           npm run dev > /tmp/kontoklar-server.log 2>&1 &
           trap 'kill $!' EXIT
           node -e "const u='http://127.0.0.1:4173';(async()=>{for(let n=0;n<50;n++){try{if((await fetch(u)).ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}process.exit(1);})()"
-          node tests/sidebar.e2e.mjs
+          npm run test:layout
+          export KONTOKLAR_CHROMIUM="$(node --input-type=module -e "import {chromium} from 'playwright'; console.log(chromium.executablePath())")"
+          npm run test:e2e
+      - name: Store browser test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-layout-screenshots
+          path: windows/tests/output/*.png
+          if-no-files-found: ignore
+      - name: Build portable Windows application
+        run: |
+          curl --fail --location --retry 3 https://github.com/electron/electron/releases/download/v44.9.2/electron-v44.9.2-win32-x64.zip --output "$RUNNER_TEMP/electron-win.zip"
+          python3 scripts/package.py "$RUNNER_TEMP/electron-win.zip" ../dist-windows
+          version="$(node -p "require('./package.json').version")"
+          mv ../dist-windows/KontoKlar-Windows-x64.zip "../dist-windows/KontoKlar-Windows-x64-v$version.zip"
+          cd ../dist-windows
+          sha256sum KontoKlar-Windows-x64-v*.zip > KontoKlar-Windows-SHA256.txt
+      - name: Verify packaged application matches tested source
+        run: |
+          python3 - <<'PY'
+          import json, zipfile
+          from pathlib import Path
+          version = json.loads(Path("package.json").read_text())["version"]
+          with zipfile.ZipFile(f"../dist-windows/KontoKlar-Windows-x64-v{version}.zip") as archive:
+              assert archive.read("KontoKlar/resources/app/src/style.css") == Path("src/style.css").read_bytes()
+              assert archive.read("KontoKlar/resources/app/main.cjs") == Path("main.cjs").read_bytes()
+              assert json.loads(archive.read("KontoKlar/resources/app/package.json"))["version"] == version
+              assert "KontoKlar/KontoKlar.exe" in archive.namelist()
+          print("PASS: packaged CSS, application entry point, version and Windows executable")
+          PY
+      - name: Publish verified Windows 1.1.2
+        if: github.ref == 'refs/heads/fix/windows-page-list-overlap'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view windows-v1.1.2 > /dev/null 2>&1; then
+            echo 'Release already exists; existing downloads are preserved.'
+            exit 0
+          fi
+          gh release create windows-v1.1.2 --target "$GITHUB_SHA" --title 'KontoKlar Windows 1.1.2' --notes-file RELEASE-NOTES.md --latest ../dist-windows/KontoKlar-Windows-x64-v1.1.2.zip ../dist-windows/KontoKlar-Windows-SHA256.txt
